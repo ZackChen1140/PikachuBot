@@ -35,9 +35,9 @@ class pickachuAI(commands.Cog):
                 embed.add_field(name=emb_name, value=emb_value, inline=False)
             else:        
                 if mode_num == 0 or mode_num == 3:
-                    converter = opencc.OpenCC('s2tw.json')
+                    converter = opencc.OpenCC('s2twp.json')
                 elif mode_num == 4:
-                    converter = opencc.OpenCC('tw2s.json')
+                    converter = opencc.OpenCC('tw2sp.json')
 
                 emb_value = converter.convert(tgt_texts[i])
                 embed.add_field(name=content, value=emb_value, inline=False)
