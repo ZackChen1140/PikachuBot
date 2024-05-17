@@ -13,7 +13,7 @@ intents.message_content = True
 # command_prefix是前綴符號，可以自由選擇($, #, &...)
 
 client = discord.Client(intents=intents)
-bot = commands.Bot(command_prefix = '皮卡丘', intents = intents)
+bot = commands.Bot(command_prefix = '', intents = intents)
 
 # 載入指令程式檔案
 @bot.command()

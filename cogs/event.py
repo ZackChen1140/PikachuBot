@@ -2,6 +2,9 @@ import discord
 from discord.ext import commands, tasks
 import asyncio
 import random
+from discord import Embed
+
+import opencc
 
 skills = ['十萬伏特', '電球', '電網', '鐵尾', '雷電拳', '影子分身', '伏特攻擊', '電光一閃']
 skill_voice = [
@@ -18,6 +21,8 @@ skill_voice = [
 class Event(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.t2s_converter = opencc.OpenCC('t2s.json')
+        self.s2twp_converter = opencc.OpenCC('s2twp.json')
 
     # @commands.Cog.listener()
     # async def on_ready(self):
@@ -72,6 +77,17 @@ class Event(commands.Cog):
                         if skills[idx] in chs:
                             await message.channel.send(skill_voice[idx])
                             chs = ''
+        else:
+            content = message.content.strip().replace('\n','')
+            sCH_content = self.t2s_converter.convert(content)
+            twpCH_content = self.s2twp_converter.convert(sCH_content)
+            if twpCH_content != content:
+                if len(content) > 5:
+                    content = content[:5]
+                embed = Embed(title="pika pika! pikachu!!!", description="支語警告！", color=discord.Color.from_str('#FFDC35'))
+                embed.add_field(name=f'「{content}...」應改為：', value=twpCH_content, inline=False)
+                await message.channel.send(embed=embed)
+
 
     @commands.Cog.listener()
     async def on_member_join(member: discord.Member):
