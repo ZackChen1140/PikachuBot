@@ -81,9 +81,12 @@ class Event(commands.Cog):
             content = message.content.strip().replace('\n','')
             sCH_content = self.t2s_converter.convert(content)
             twpCH_content = self.s2twp_converter.convert(sCH_content)
-            if twpCH_content != content:
+            twpCH_content_check = self.s2twp_converter.convert(content)
+            if twpCH_content != content and twpCH_content_check!= content:
+                field_name = f'「{content}」應改為：'
                 if len(content) > 5:
                     content = content[:5]
+                    field_name = f'「{content}...」應改為：'
                 embed = Embed(title="pika pika! pikachu!!!", description="支語警告！", color=discord.Color.from_str('#FFDC35'))
                 embed.add_field(name=f'「{content}...」應改為：', value=twpCH_content, inline=False)
                 await message.channel.send(embed=embed)
