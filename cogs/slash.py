@@ -74,16 +74,30 @@ class Slash(commands.Cog):
             Choice(name = '宵夜', value = 'late night snack')
         ]
     )
-    async def Meals(self, interaction: discord.Interaction, meal_time: Choice[str]):
+    @app_commands.choices(
+        numbers = [
+            Choice(name = '一間', value='1'),
+            Choice(name = '兩間', value='2'),
+            Choice(name = '三間', value='3'),
+            Choice(name = '四間', value='4'),
+            Choice(name = '五間', value='5')
+        ]
+    )
+    async def Meals(self, interaction: discord.Interaction, meal_time: Choice[str], numbers: Optional[Choice[str]] = None):
         server_id = str(interaction.guild.id)
         doc_ref = self.db.collection(server_id).document('meals')
         doc = doc_ref.get()
         if doc.exists:
             meals_dic = doc.to_dict()
             if meal_time.value in meals_dic.keys():
-                meal_list = meals_dic[meal_time.value]
                 random.shuffle(meals_dic.get(meal_time.value))
-                await interaction.response.send_message('pikachu~\n' + meal_time.name + ': ' + meals_dic.get(meal_time.value)[0])
+                meals_str = meals_dic.get(meal_time.value)[0]
+                if numbers != None:
+                    for i in range(1, int(numbers.value)):
+                        meals_str += f'\n{meals_dic.get(meal_time.value)[i]}'
+                embed = Embed(title=meal_time.name, description=meals_str, color=discord.Color.from_str('#FFDC35'))
+                #await interaction.response.send_message('pikachu~\n' + meal_time.name + ': ' + meals_dic.get(meal_time.value)[0])
+                await interaction.response.send_message(content='pikachu~', embed=embed)
             else:
                 await interaction.response.send_message('pikachu?\n(皮卡丘還不知道這個時段有什麼好吃的，快新增餐廳吧～)')
         else:
