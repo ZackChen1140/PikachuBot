@@ -25,8 +25,8 @@ def remove_duplicates(text):
 class Event(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.t2s_converter = opencc.OpenCC('t2s.json')
-        self.s2twp_converter = opencc.OpenCC('s2twp.json')
+        # self.t2s_converter = opencc.OpenCC('t2s.json')
+        # self.s2twp_converter = opencc.OpenCC('s2twp.json')
 
     # @commands.Cog.listener()
     # async def on_ready(self):
@@ -81,17 +81,17 @@ class Event(commands.Cog):
                         if skills[idx] in chs:
                             await message.channel.send(skill_voice[idx])
                             chs = ''
-        else:
-            content = message.content.strip().replace('\n','')
-            twpCH_content = self.s2twp_converter.convert(content)
-            if remove_duplicates(twpCH_content) != remove_duplicates(content):
-                field_name = f'「{content}」應改為：'
-                if len(content) > 5:
-                    content = content[:5]
-                    field_name = f'「{content}...」應改為：'
-                embed = Embed(title="pika pika! pikachu!!!", description="支語警告！", color=discord.Color.from_str('#FFDC35'))
-                embed.add_field(name=field_name, value=twpCH_content, inline=False)
-                await message.channel.send(embed=embed)
+        # else:
+        #     content = message.content.strip().replace('\n','')
+        #     twpCH_content = self.s2twp_converter.convert(content)
+        #     if remove_duplicates(twpCH_content) != remove_duplicates(content):
+        #         field_name = f'「{content}」應改為：'
+        #         if len(content) > 5:
+        #             content = content[:5]
+        #             field_name = f'「{content}...」應改為：'
+        #         embed = Embed(title="pika pika! pikachu!!!", description="支語警告！", color=discord.Color.from_str('#FFDC35'))
+        #         embed.add_field(name=field_name, value=twpCH_content, inline=False)
+        #         await message.channel.send(embed=embed)
                 
 
 
