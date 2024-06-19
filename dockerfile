@@ -1,5 +1,7 @@
 FROM python:3.8-buster
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /app
 
 COPY requirements.txt .
