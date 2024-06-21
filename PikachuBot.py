@@ -7,6 +7,9 @@ import os
 import asyncio
 import random
 
+with open('bottoken.txt', 'r') as f:
+    token = f.read()
+
 # intents是要求機器人的權限
 intents = discord.Intents.all()
 intents.message_content = True
@@ -47,7 +50,7 @@ async def load_extensions():
 
 async def main():
     await load_extensions()
-    await bot.start('MTIzMTIzMjQ5NTUxNzk2MjI1MA.G1easV.HSdAczFDgs8Dd1QpQ8lZGZ666-qJ16dQUuEeso')
+    await bot.start(token)
 
 asyncio.run(main())
 
