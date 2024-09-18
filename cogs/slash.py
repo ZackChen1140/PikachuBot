@@ -62,6 +62,22 @@ class Slash(commands.Cog):
 
             await interaction.response.send_message(embed=embed)
 
+    @app_commands.command(name = '抽籤', description = '皮卡抽抽樂')
+    @app_commands.describe(title = '抽籤主題', straw_number = '抽取數量', members = '籤(請用,分隔)')
+    async def DrawStraws(self, interaction: discord.Interaction, title: str, straw_number: int, members: str):
+        embed = Embed(title=title, description="抽籤結果如下", color=discord.Color.from_str('#FFDC35'))
+        member_lst = members.split(',')
+        if straw_number <= 0 or straw_number >= len(member_lst):
+            await interaction.response.send_message('pikapika??')
+        else:
+            random.shuffle(member_lst)
+            straws_str = member_lst[0]
+            for i in range(1, straw_number):
+                straws_str += f'\n{member_lst[i]}'
+            embed.add_field(name='抽中', value=straws_str, inline=False)
+            embed.add_field(name='籤筒', value=members, inline=False)
+            await interaction.response.send_message(embed=embed)
+            
     @app_commands.command(name = '吃什麼', description = '皮卡丘喜歡吃番茄醬~')
     @app_commands.describe(meal_time = '用餐時段')
     @app_commands.choices(
