@@ -11,7 +11,7 @@
 可以新增你與朋友們喜歡的餐廳  
 ![Add Restaurant](./readmefiles/add%20restaurant.png)
 
-也能夠執行翻譯工作(目前僅支援中文與英文) 
+也能夠執行翻譯工作(目前僅支援中文與英文)  
 ![Translation SC to TC](./readmefiles/translationSC2TC.png)
 ![Translation E to TC](./readmefiles/translationE2TC.png)
 
