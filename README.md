@@ -2,16 +2,16 @@
 這是一款有著皮卡丘外觀，並模仿著皮卡丘行為，但卻有著許多有趣功能的Discord Bot。  
 ![PikachuBot Profile](readmefiles/profile.png)
 
-內建寶可夢圖鑑功能
+內建寶可夢圖鑑功能 
 ![Pokemon Classification](./readmefiles/pokémon%20classification.png)
 
-能夠解決你三餐的煩惱
+能夠解決你三餐的煩惱 
 ![Which Restaurant?](./readmefiles/which%20restaurant.png)
 
-可以新增你與朋友們喜歡的餐廳
+可以新增你與朋友們喜歡的餐廳 
 ![Add Restaurant](./readmefiles/add%20restaurant.png)
 
-也能夠執行翻譯工作(目前僅支援中文與英文)
+也能夠執行翻譯工作(目前僅支援中文與英文) 
 ![Translation SC to TC](./readmefiles/translationSC2TC.png)
 ![Translation E to TC](./readmefiles/translationE2TC.png)
 
