@@ -3,6 +3,8 @@
 ![PikachuBot Profile](readmefiles/profile.png)
 
 內建寶可夢圖鑑功能  
+[New Gen Pokédex](https://github.com/ZackChen1140/New-Gen-Pok-dex)
+
 ![Pokemon Classification](./readmefiles/pokémon%20classification.png)
 
 能夠解決你三餐的煩惱  
