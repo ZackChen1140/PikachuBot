@@ -4,6 +4,7 @@ import asyncio
 import random
 from discord import Embed
 
+import google.generativeai as genai
 import opencc
 import re
 
@@ -25,6 +26,10 @@ def remove_duplicates(text):
 class Event(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        with open('genaikey.txt', 'r') as f:
+            self.genaikey = f.read()
+        genai.configure(api_key=self.genaikey)
+        self.model = genai.GenerativeModel("gemini-1.5-flash")
         # self.t2s_converter = opencc.OpenCC('t2s.json')
         # self.s2twp_converter = opencc.OpenCC('s2twp.json')
 
@@ -44,23 +49,23 @@ class Event(commands.Cog):
                     await voice_channel.send('piikachuu~ (皮卡丘跑走了...)')
                     await self.bot.voice_clients[0].disconnect()
 
-    #@bot.command()
     @commands.Cog.listener()
-    # 輸入%Hello呼叫指令
     async def on_message(self, message):
-        # 回覆Hello, world!
         if message.author == self.bot.user:
             return
         
+        is_command = False
         if message.content.startswith('皮卡丘'):
             #sentence_list = message.content.split(" ",2)
             if len(message.content.strip())==3:
+                is_command = True
                 rm = random.randint(0, 2)
                 ans = ['pi?', 'pika?', 'pikapika :smiley:']
                 await message.channel.send(ans[rm])
             else:
                 sentence_list = message.content.split(' ')
                 if '進來' in message.content:
+                    is_command = True
                     voice_channel = message.author.voice.channel
                     if voice_channel:
                         # 連接到語音頻道
@@ -68,6 +73,7 @@ class Event(commands.Cog):
                     else:
                         await message.channel.send('pika?')
                 if '離開' in message.content:
+                    is_command = True
                     if self.bot.voice_clients:
                         # 離開語音頻道
                         await self.bot.voice_clients[0].disconnect()
@@ -79,21 +85,23 @@ class Event(commands.Cog):
                     chs+=ch
                     for idx in range(0, len(skills)):
                         if skills[idx] in chs:
+                            is_command = True
                             await message.channel.send(skill_voice[idx])
                             chs = ''
-        # else:
-        #     content = message.content.strip().replace('\n','')
-        #     twpCH_content = self.s2twp_converter.convert(content)
-        #     if remove_duplicates(twpCH_content) != remove_duplicates(content):
-        #         field_name = f'「{content}」應改為：'
-        #         if len(content) > 5:
-        #             content = content[:5]
-        #             field_name = f'「{content}...」應改為：'
-        #         embed = Embed(title="pika pika! pikachu!!!", description="支語警告！", color=discord.Color.from_str('#FFDC35'))
-        #         embed.add_field(name=field_name, value=twpCH_content, inline=False)
-        #         await message.channel.send(embed=embed)
-                
-
+        
+        if not is_command:
+            server_id = str(message.guild.id)
+            doc_ref = self.bot.db.collection(server_id).document('genai')
+            doc = doc_ref.get()
+            if doc.exists:
+                channels = doc.to_dict().get('channels')
+                if str(message.channel.id) in channels:
+                    content = message.content.strip()
+                    if content.startswith('皮卡丘'):
+                        content = content[3:].strip()
+                    response = self.model.generate_content(content)
+                    await message.channel.send(response.text)
+            
 
     @commands.Cog.listener()
     async def on_member_join(member: discord.Member):

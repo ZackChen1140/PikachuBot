@@ -7,6 +7,10 @@ import os
 import asyncio
 import random
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
 with open('bottoken.txt', 'r') as f:
     token = f.read()
 
@@ -49,6 +53,9 @@ async def load_extensions():
             await bot.load_extension(f"cogs.{filename[:-3]}")
 
 async def main():
+    cred = credentials.Certificate('pikachubot-db-4a94b-firebase-adminsdk-sm9rn-096b5c4f33.json')
+    app = firebase_admin.initialize_app(cred)
+    bot.db = firestore.client()
     await load_extensions()
     await bot.start(token)
 

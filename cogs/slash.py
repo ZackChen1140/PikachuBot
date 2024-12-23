@@ -9,16 +9,16 @@ import random
 import asyncio
 import datetime
 
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+# import firebase_admin
+# from firebase_admin import credentials
+# from firebase_admin import firestore
 
 class Slash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.cred = credentials.Certificate('pikachubot-db-4a94b-firebase-adminsdk-sm9rn-096b5c4f33.json')
-        self.app = firebase_admin.initialize_app(self.cred)
-        self.db = firestore.client()
+        # self.cred = credentials.Certificate('pikachubot-db-4a94b-firebase-adminsdk-sm9rn-096b5c4f33.json')
+        # self.app = firebase_admin.initialize_app(self.cred)
+        # self.db = firestore.client()
     
     async def send_after_delay(self, interaction: discord.Interaction, delay: int, msg: str):
         await asyncio.sleep(delay)
@@ -101,7 +101,7 @@ class Slash(commands.Cog):
     )
     async def Meals(self, interaction: discord.Interaction, meal_time: Choice[str], numbers: Optional[Choice[str]] = None):
         server_id = str(interaction.guild.id)
-        doc_ref = self.db.collection(server_id).document('meals')
+        doc_ref = self.bot.db.collection(server_id).document('meals')
         doc = doc_ref.get()
         if doc.exists:
             meals_dic = doc.to_dict()
@@ -134,7 +134,7 @@ class Slash(commands.Cog):
     async def addRestaurant(self, interaction: discord.Interaction, meal_time: Choice[str], restaurant: str):
         server_id = str(interaction.guild.id)
         restaurant = restaurant.strip()
-        doc_ref = self.db.collection(server_id).document('meals')
+        doc_ref = self.bot.db.collection(server_id).document('meals')
         doc = doc_ref.get()
         if doc.exists:
             meals_dic = doc.to_dict()
@@ -171,7 +171,7 @@ class Slash(commands.Cog):
     async def removeRestaurant(self, interaction: discord.Interaction, meal_time: Choice[str], restaurant: str):
         server_id = str(interaction.guild.id)
         restaurant = restaurant.strip()
-        doc_ref = self.db.collection(server_id).document('meals')
+        doc_ref = self.bot.db.collection(server_id).document('meals')
         doc = doc_ref.get()
         if doc.exists:
             meals_dic = doc.to_dict()
@@ -224,7 +224,7 @@ class Slash(commands.Cog):
     )
     async def showRestaurants(self, interaction: discord.Interaction, meal_time: Choice[str]):
         server_id = str(interaction.guild.id)
-        doc_ref = self.db.collection(server_id).document('meals')
+        doc_ref = self.bot.db.collection(server_id).document('meals')
         doc = doc_ref.get()
         if doc.exists:
             meals_dic = doc.to_dict()
