@@ -1,6 +1,4 @@
-# 導入Discord.py模組
 import discord
-# 導入commands指令模組
 from discord.ext import commands, tasks
 from discord import app_commands
 import os
