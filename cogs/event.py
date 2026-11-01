@@ -1,3 +1,5 @@
+from urllib import response
+
 import discord
 from discord.ext import commands
 
@@ -19,8 +21,8 @@ class Event(commands.Cog):
         self.client = genai.Client(api_key=self.genaikey)
         self.config = types.GenerateContentConfig(
             temperature=0.5,
-            max_output_tokens=1024,
-            system_instruction="All responses must be written in Traditional Chinese as commonly used in Taiwan"
+            max_output_tokens=512,
+            system_instruction="Respond in Traditional Chinese (Taiwanese)."
         )
 
     def generate_content(self, prompt):
@@ -40,31 +42,38 @@ class Event(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        async with message.channel.typing():
-            is_command = False
-            if message.content.startswith('皮卡丘'):
-                if len(message.content.strip())==3:
-                    is_command = True
-                    rm = random.randint(0, 2)
-                    ans = ['pi?', 'pika?', 'pikapika :smiley:']
-                    await message.channel.send(ans[rm])
-                else:
-                    chs = ''
-                    for ch in message.content:
-                        chs+=ch
-                        for idx in range(0, len(skills.skill_names)):
-                            if skills.skill_names[idx] in chs:
-                                is_command = True
-                                await message.channel.send(skills.skill_voice[idx])
-                                chs = ''
-            
+        is_command = False
+        content = message.content.strip()
+        if content.startswith('皮卡丘'):
+            if len(content)==3:
+                is_command = True
+                rm = random.randint(0, 2)
+                ans = ['pi?', 'pika?', 'pikapika :smiley:']
+                await message.channel.send(ans[rm])
+            else:
+                chs = ''
+                for ch in content:
+                    chs+=ch
+                    for idx in range(0, len(skills.skill_names)):
+                        if skills.skill_names[idx] in chs:
+                            is_command = True
+                            await message.channel.send(skills.skill_voice[idx])
+                            chs = ''
+
             if not is_command:
-                server_id = str(message.guild.id)
-                doc_ref = self.bot.db.collection(server_id).document('genai')
-                doc = doc_ref.get()
-                if doc.exists:
-                    channels = doc.to_dict().get('channels')
-                    if str(message.channel.id) in channels:
+                async with message.channel.typing():
+                    resopnse = self.generate_content(content[3:])
+                    await message.channel.send(resopnse)
+
+        
+        if not is_command:
+            server_id = str(message.guild.id)
+            doc_ref = self.bot.db.collection(server_id).document('genai')
+            doc = doc_ref.get()
+            if doc.exists:
+                channels = doc.to_dict().get('channels')
+                if str(message.channel.id) in channels:
+                    async with message.channel.typing():
                         content = message.content.strip()
                         if content.startswith('皮卡丘'):
                             content = content[3:].strip()
